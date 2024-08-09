@@ -171,4 +171,8 @@ input[type="date"] {
     font-weight: bold;
 }
 
-/* Ícone de calendário para o input de data */
+@media (min-width: 768px) { 
+.modal-conteudo {
+  width: 30%; /* Largura para telas maiores */
+}
+}
