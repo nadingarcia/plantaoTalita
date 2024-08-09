@@ -171,8 +171,11 @@ input[type="date"] {
     font-weight: bold;
 }
 
-@media (min-width: 768px) { 
+@media (max-width: 768px) { 
 .modal-conteudo {
-  width: 30%; /* Largura para telas maiores */
+  width: 80%; /* Largura para telas maiores */
+}
+.container {
+  width: 90%;
 }
 }
