@@ -7,34 +7,40 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
+            <header style="background: lightpink;">
+                <img id="btn-adicionar-empresa" src="img/companhia.png" class="botaones">
+                <img id="adicionaPlan" src="./img/botao-adicionar.png" class="botaones">
+                <div class="empresas" style="display: none;">
+                    <h2>Empresas</h2>
+                    <ul id="lista-empresas"></ul>
+                </div>
+            </header>
 <body>
     <div class="container">
-        <h1>Controle de Plantões</h1>
 
-        <div class="empresas">
-            <h2>Empresas</h2>
-            <ul id="lista-empresas"></ul>
-            <button id="btn-adicionar-empresa">Adicionar Empresa</button>
-        </div>
+        <select id="filtroMes" style="margin-top: 1rem;">
+            <option value="0">Todos os meses</option>
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <!-- ... outros meses ... -->
+        </select>
 
-        <div class="plantoes">
-            <h2>Adicionar Plantão</h2>
-            <label for="data-plantao">Datas:</label>
-            <input type="text" id="data-plantao" data-default-date="today" data-multiple="true" data-dateFormat="Y-m-d">
-            
-            <label for="empresa-plantao">Empresa:</label>
-            <select id="empresa-plantao" required>
-            </select>
-            <button id="btn-adicionar-plantao">Adicionar Plantão</button>
-            <select id="filtroMes" style="margin-top: 1rem;">
-                <option value="0">Todos os meses</option>
-                <option value="1">Janeiro</option>
-                <option value="2">Fevereiro</option>
-                <!-- ... outros meses ... -->
-            </select>
-            <div class="lista-plantoes">
-                <h3>Plantões Adicionados:</h3>
-                <ul id="plantoes-adicionados"></ul>
+        <div class="modal" id="modal-plantao">
+            <div class="modal-conteudo">
+                <span class="fechar-modal" onclick="fecharModalPlantao()">×</span> 
+                <h2>Adicionar Plantão</h2>
+                <label for="data-plantao">Datas:</label>
+                <input type="text" id="data-plantao" data-default-date="today" data-multiple="true" data-dateFormat="Y-m-d">
+
+                <label for="empresa-plantao">Empresa:</label>
+                <select id="empresa-plantao" required>
+                </select>
+                <button id="btn-adicionar-plantao">Adicionar Plantão</button>
+
+                <div class="lista-plantoes">
+                    <h3>Plantões Adicionados:</h3>
+                    <ul id="plantoes-adicionados"></ul>
+                </div>
             </div>
         </div>
 

@@ -111,8 +111,11 @@ button {
   }
   
   /* Estilos específicos para botões de adicionar e editar */
-  #btn-adicionar-empresa, #btn-adicionar-plantao {
-    background-color: #008CBA; /* Azul */
+  .botaones {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    margin: 12px 0 0 12px;
   }
   
   /* Estilos específicos para botões de excluir */

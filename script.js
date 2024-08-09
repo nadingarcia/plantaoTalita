@@ -9,7 +9,7 @@ const plantaoesAdicionadosList = document.getElementById('plantoes-adicionados')
 const totalMensalElement = document.getElementById('total-mensal');
 const modalTitulo = document.getElementById('modal-titulo');
 const idEmpresaInput = document.getElementById('id-empresa');
-const filtroMesSelect = document.getElementById('filtroMes'); // Substitua 'filtroMes' pelo ID do seu select
+const filtroMesSelect = document.getElementById('filtroMes');
 
 let empresas = JSON.parse(localStorage.getItem('empresas')) || [];
 let plantoes = JSON.parse(localStorage.getItem('plantoes')) || [];
@@ -267,6 +267,25 @@ filtroMesSelect.addEventListener('change', () => {
     carregarPlantoes(); // Recarrega a lista de plantões
     atualizarTotalMensal(); // Atualiza o total
 });
+
+const adicionaPlanBtn = document.getElementById('adicionaPlan');
+// Captura o modal de plantão
+const modalPlantao = document.getElementById('modal-plantao');
+
+// Adiciona um evento de clique ao botão
+adicionaPlanBtn.addEventListener('click', () => {
+  modalPlantao.style.display = 'block';
+});
+
+// Função para fechar o modal de plantão
+function fecharModalPlantao() {
+  modalPlantao.style.display = 'none';
+}
+
+// Função para fechar o modal de empresa
+function fecharModalEmpresa() {
+    modalEmpresa.style.display = 'none';
+  }
 
 atualizarSelectEmpresas();
 atualizarTotalMensal();
