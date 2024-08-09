@@ -12,7 +12,7 @@ body {
     padding: 20px;
 }
 
-.empresas, .plantoes, .total {
+.plantoes, .total {
     width: 100%; /* Largura total */
     max-width: 500px; /* Largura máxima */
     margin-bottom: 20px;
@@ -39,6 +39,7 @@ li {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-direction: column;
 }
 
 li button {

@@ -1,7 +1,6 @@
 const listaEmpresas = document.getElementById('lista-empresas');
 const btnAdicionarEmpresa = document.getElementById('btn-adicionar-empresa');
 const modalEmpresa = document.getElementById('modal-empresa');
-const fecharModal = document.querySelector('.fechar-modal');
 const btnSalvarEmpresa = document.getElementById('salvar-empresa');
 const selectEmpresaPlantao = document.getElementById('empresa-plantao');
 const btnAdicionarPlantao = document.getElementById('btn-adicionar-plantao');
@@ -15,10 +14,13 @@ let empresas = JSON.parse(localStorage.getItem('empresas')) || [];
 let plantoes = JSON.parse(localStorage.getItem('plantoes')) || [];
 
 const dataPlantaoInput = document.getElementById('data-plantao');
-const fp = flatpickr(dataPlantaoInput, { // Passa o elemento como primeiro argumento
-    mode: "multiple", 
-    dateFormat: "Y-m-d", 
-});
+const fp = flatpickr(dataPlantaoInput, {
+    mode: "multiple",
+    dateFormat: "d/m", // Define o formato de data para exibição
+    onChange: function(selectedDates, dateStr, instance) {
+      instance.input.value = dateStr; 
+    }
+  });
 
 // Abre o calendário ao clicar no input
 dataPlantaoInput.addEventListener('click', () => {
@@ -33,11 +35,6 @@ btnAdicionarEmpresa.addEventListener('click', () => {
     document.getElementById('cnpj-empresa').value = '';
     document.getElementById('valor-empresa').value = '';
     modalEmpresa.style.display = 'block';
-});
-
-// Fecha o modal
-fecharModal.addEventListener('click', () => {
-    modalEmpresa.style.display = 'none';
 });
 
 // Fecha o modal ao clicar fora dele
@@ -85,9 +82,10 @@ function carregarEmpresas() {
     listaEmpresas.innerHTML = '';
     empresas.forEach((empresa) => {
         const li = document.createElement('li');
-        li.innerHTML = `
+        li.innerHTML = `<div>
             ${empresa.nome} - CNPJ: ${empresa.cnpj} - R$ ${empresa.valor.toFixed(2)}
-            <div style="display: flex";>
+            </div>
+            <div style="display: flex;">
                 <button onclick="editarEmpresa('${empresa.id}')">Editar</button>
                 <button onclick="excluirEmpresa('${empresa.id}')">Excluir</button>
             </div>
@@ -189,6 +187,7 @@ function carregarPlantoes() {
 
     plantoesFiltrados.forEach((plantao) => {
         const li = document.createElement('li');
+        li.style = "flex-direction: row;";
         li.textContent = `Dia ${plantao.dia}/${plantao.mes}/${plantao.ano} - ${plantao.empresaNome} - R$ ${plantao.valor.toFixed(2)}`; // Corrigido: Adicionado o ano
 
         // Cria um botão de exclusão

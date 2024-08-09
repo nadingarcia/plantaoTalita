@@ -10,10 +10,6 @@
             <header style="background: lightpink;">
                 <img id="btn-adicionar-empresa" src="img/companhia.png" class="botaones">
                 <img id="adicionaPlan" src="./img/botao-adicionar.png" class="botaones">
-                <div class="empresas" style="display: none;">
-                    <h2>Empresas</h2>
-                    <ul id="lista-empresas"></ul>
-                </div>
             </header>
 <body>
     <div class="container">
@@ -30,7 +26,7 @@
                 <span class="fechar-modal" onclick="fecharModalPlantao()">×</span> 
                 <h2>Adicionar Plantão</h2>
                 <label for="data-plantao">Datas:</label>
-                <input type="text" id="data-plantao" data-default-date="today" data-multiple="true" data-dateFormat="Y-m-d">
+                <input type="text" id="data-plantao" data-default-date="today" data-multiple="true">
 
                 <label for="empresa-plantao">Empresa:</label>
                 <select id="empresa-plantao" required>
@@ -44,13 +40,13 @@
             </div>
         </div>
 
-        <div class="total">
+        <div class="total" style="position: fixed; bottom: 0; width: 80%;">
             <h3>Total Mensal: R$ <span id="total-mensal">0</span></h3>
         </div>
 
         <div class="modal" id="modal-empresa">
             <div class="modal-conteudo">
-                <span class="fechar-modal">×</span>
+                <span class="fechar-modal" onclick="fecharModalEmpresa()">×</span>
                 <h2 id="modal-titulo">Adicionar Empresa</h2>
                 <input type="hidden" id="id-empresa">
                 <label for="nome-empresa">Nome:</label>
@@ -60,6 +56,10 @@
                 <label for="valor-empresa">Valor por Plantão:</label>
                 <input type="number" id="valor-empresa" name="valor-empresa"><br>
                 <button id="salvar-empresa" style="width: 96%;">Salvar</button>
+                <div>
+                    <h2>Empresas</h2>
+                    <ul id="lista-empresas"></ul>
+                </div>
             </div>
         </div>
     </div>
