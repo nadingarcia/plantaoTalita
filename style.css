@@ -183,3 +183,22 @@ input[type="date"] {
   width: 90%;
 }
 }
+
+#calendario-container {
+  width: 100%; /* Ocupa a largura total do container */
+  margin: 0 10%; /* Margem superior e inferior, centralizado horizontalmente */
+  max-width: 600px;
+}
+
+/* Estilo para os eventos (plantões) no calendário */
+.flatpickr-day.tem-plantao {
+  background-color: lightblue; /* Um fundo para os dias com plantão */
+  border-radius: 50%; /* Deixa a marcação redonda */
+}
+
+.flatpickr-day.tem-plantao::after {
+  content: attr(data-empresa); /* Adiciona o nome da empresa após o dia */
+  font-size: 10px; 
+  display: block;
+  text-align: center;
+}

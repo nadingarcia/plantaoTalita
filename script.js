@@ -71,28 +71,42 @@ btnSalvarEmpresa.addEventListener('click', () => {
         empresas.push(novaEmpresa);
     }
 
+    if (!(novaEmpresa.id in coresEmpresas)) {
+        coresEmpresas[novaEmpresa.id] = gerarCorAleatoria();
+      }
+
     localStorage.setItem('empresas', JSON.stringify(empresas));
     carregarEmpresas();
     atualizarSelectEmpresas();
     modalEmpresa.style.display = 'none';
+    atualizarLegendaCalendario(); // Atualiza a legenda
+    atualizarCalendario();
 });
 
 // Carrega as empresas do Local Storage e exibe na lista
 function carregarEmpresas() {
-    listaEmpresas.innerHTML = '';
+    listaEmpresas.innerHTML = ''; // Limpa a lista existente
     empresas.forEach((empresa) => {
-        const li = document.createElement('li');
-        li.innerHTML = `<div>
+      const li = document.createElement('li');
+      li.innerHTML = `
+          <div>
             ${empresa.nome} - CNPJ: ${empresa.cnpj} - R$ ${empresa.valor.toFixed(2)}
-            </div>
-            <div style="display: flex;">
-                <button onclick="editarEmpresa('${empresa.id}')">Editar</button>
-                <button onclick="excluirEmpresa('${empresa.id}')">Excluir</button>
-            </div>
-        `;
-        listaEmpresas.appendChild(li);
+          </div>
+          <div style="display: flex;">
+            <button onclick="editarEmpresa('${empresa.id}')">Editar</button>
+            <button onclick="excluirEmpresa('${empresa.id}')">Excluir</button>
+          </div>
+      `;
+      listaEmpresas.appendChild(li);
+  
+      // Gerar cores para empresas que ainda não têm
+      if (!(empresa.id in coresEmpresas)) {
+        coresEmpresas[empresa.id] = gerarCorAleatoria();
+      }
     });
-}
+  
+    atualizarLegendaCalendario(); // Atualiza a legenda com as novas empresas
+  }
 
 // Abre o modal para editar uma empresa
 function editarEmpresa(id) {
@@ -285,6 +299,128 @@ function fecharModalPlantao() {
 function fecharModalEmpresa() {
     modalEmpresa.style.display = 'none';
   }
+
+  const calendario = document.getElementById('calendario');
+  const calendarioInstance = flatpickr(calendario, {
+    inline: true, 
+    onDayCreate: function(dObj, dStr, fp, dayElem) {
+      // Verifica se o dia tem plantão
+      const plantaoDoDia = plantoes.find(p => p.data === fp.formatDate(dayElem.dateObj, "Y-m-d"));
+  
+      // Se tiver plantão, adiciona a classe e o nome da empresa ao elemento do dia
+      if (plantaoDoDia) {
+        dayElem.classList.add('tem-plantao');
+        dayElem.dataset.empresa = plantaoDoDia.empresaNome; 
+      }
+    }
+  });
+  
+  // Função para atualizar o calendário (chame sempre que os plantões mudarem)
+  function atualizarCalendario() {
+    calendarioInstance.redraw(); // Redesenha o calendário para aplicar as mudanças
+  }
+
+  function criarGraficoPizza(dados) {
+    const canvas = document.getElementById('graficoPizza');
+    canvas.width = 390; // Largura em pixels
+    canvas.height = 150; 
+    const ctx = canvas.getContext('2d');
+  
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: dados.map(item => item.mes), // Nomes dos meses
+            datasets: [{
+                label: 'Faturamento por Mês',
+                data: dados.map(item => item.total), // Valores de faturamento
+                options: {
+                    maintainAspectRatio: false, // Desativa a proporção de aspecto fixa
+                    responsive: true, // Torna o gráfico responsivo
+                    // ... outras opções
+                  },
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)', // Cor para o primeiro mês
+                    'rgba(54, 162, 235, 0.2)', // Cor para o segundo mês
+                    'rgba(255, 206, 86, 0.2)', // Cor para o terceiro mês
+                    // ... adicione mais cores se necessário
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    // ... adicione mais cores se necessário
+                ],
+                borderWidth: 1
+            }]
+        },
+    });
+  }
+  
+  // Função para calcular o faturamento por mês
+  function calcularFaturamentoPorMes() {
+    const faturamentoPorMes = {};
+  
+    plantoes.forEach(plantao => {
+      const mes = plantao.mes; 
+      if (faturamentoPorMes[mes]) {
+        faturamentoPorMes[mes] += plantao.valor;
+      } else {
+        faturamentoPorMes[mes] = plantao.valor;
+      }
+    });
+  
+    // Converter o objeto em um array de objetos
+    const dadosDoGrafico = Object.keys(faturamentoPorMes).map(mes => ({
+      mes: mes, // Nome do mês (ex: "1", "2", "3"...)
+      total: faturamentoPorMes[mes] // Valor total do mês
+    }));
+  
+    return dadosDoGrafico;
+  }
+  
+  // Chame a função para criar o gráfico após carregar seus dados
+  const dadosDoGrafico = calcularFaturamentoPorMes();
+  criarGraficoPizza(dadosDoGrafico);
+
+  const coresEmpresas = {};
+
+// Função para gerar uma cor hexadecimal aleatória
+function gerarCorAleatoria() {
+  const letras = '0123456789ABCDEF';
+  let cor = '#';
+  for (let i = 0; i < 6; i++) {
+    cor += letras[Math.floor(Math.random() * 16)];
+  }
+  return cor;
+}
+
+// Função para atualizar a legenda do calendário
+function atualizarLegendaCalendario() {
+  const legendaContainer = document.querySelector('.legenda-calendario'); // Seleciona a div da legenda
+  legendaContainer.innerHTML = ''; // Limpa a legenda existente
+
+  for (const empresaId in coresEmpresas) {
+    const legendaItem = document.createElement('div');
+    legendaItem.classList.add('legenda-item');
+
+    const legendaCor = document.createElement('div');
+    legendaCor.classList.add('legenda-cor');
+    legendaCor.style.backgroundColor = coresEmpresas[empresaId];
+
+    const legendaTexto = document.createElement('span');
+    const empresa = empresas.find(emp => emp.id === empresaId);
+    legendaTexto.textContent = empresa.nome; // Exibe o nome da empresa
+
+    legendaItem.appendChild(legendaCor);
+    legendaItem.appendChild(legendaTexto);
+    legendaContainer.appendChild(legendaItem);
+  }
+}
+
+const calendarioContainer = document.getElementById('calendario-container');
+const legendaContainer = document.createElement('div');
+legendaContainer.classList.add('legenda-calendario');
+calendarioContainer.appendChild(legendaContainer);
 
 atualizarSelectEmpresas();
 atualizarTotalMensal();

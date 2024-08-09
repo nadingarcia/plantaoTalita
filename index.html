@@ -6,6 +6,7 @@
     <title>Controle de Plantões</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
 </head>
             <header style="background: lightpink;">
                 <img id="btn-adicionar-empresa" src="img/companhia.png" class="botaones">
@@ -64,7 +65,11 @@
         </div>
     </div>
 
-    <div id="calendario"></div>
+    <div id="calendario-container"> 
+        <div id="calendario"></div>
+    </div>
+    <canvas id="graficoPizza"></canvas> 
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.2.0/vanilla-masker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> 
     <script src="script.js"></script> 
